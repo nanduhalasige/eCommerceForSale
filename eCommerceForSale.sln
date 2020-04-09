@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerceForSale", "eCommerceForSale\eCommerceForSale.csproj", "{4C9232FB-BADD-4B95-8D74-6931FF083AFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eCommerceForSale", "eCommerceForSale\eCommerceForSale.csproj", "{4C9232FB-BADD-4B95-8D74-6931FF083AFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerceForSale.Data", "eCommerceForSale.Data\eCommerceForSale.Data.csproj", "{49C5D4B9-3652-4A5C-B68E-62C8E2E41467}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eCommerceForSale.Data", "eCommerceForSale.Data\eCommerceForSale.Data.csproj", "{49C5D4B9-3652-4A5C-B68E-62C8E2E41467}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerceForSale.Entity", "eCommerceForSale.Entity\eCommerceForSale.Entity.csproj", "{A4107CB6-4775-4802-9BDC-578C85BEDC90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eCommerceForSale.Entity", "eCommerceForSale.Entity\eCommerceForSale.Entity.csproj", "{A4107CB6-4775-4802-9BDC-578C85BEDC90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerceForSale.Utility", "eCommerceForSale.Utility\eCommerceForSale.Utility.csproj", "{58D19D55-D319-428B-B70E-6933C414158E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eCommerceForSale.Utility", "eCommerceForSale.Utility\eCommerceForSale.Utility.csproj", "{58D19D55-D319-428B-B70E-6933C414158E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

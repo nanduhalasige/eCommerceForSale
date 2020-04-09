@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using eCommerceForSale.Entity.Models;
+using eCommerceForSale.Data.Repositories.IRepositories;
 
 namespace eCommerceForSale.Area.Customer.Controllers
 {
@@ -13,15 +14,18 @@ namespace eCommerceForSale.Area.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork _unitOfWork)
         {
             _logger = logger;
+            unitOfWork = _unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            IEnumerable<Product> products = await unitOfWork.Product.GetAll();
+            return View(products);
         }
 
         public IActionResult Privacy()

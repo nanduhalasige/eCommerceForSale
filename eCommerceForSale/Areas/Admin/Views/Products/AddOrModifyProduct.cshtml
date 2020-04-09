@@ -1,0 +1,201 @@
+﻿@model ProductVM
+@{
+    Layout = "~/Views/Shared/_LayoutConfig.cshtml";
+}
+
+<div class="container" style="overflow-y:auto">
+    <div class="row">
+        <div class="col-10 m-2 mt-5 ml-auto mr-auto">
+            <div class="text-center text-success mb-5">
+                @if (Model.Product.Id != 0)
+                {
+                    <h3>Update Product</h3>
+                }
+                else
+                {
+                    <h3>Add New Product</h3>
+                }
+            </div>
+            <form asp-action="AddOrModifyProduct" enctype="multipart/form-data">
+                @if (Model.Product.Id != 0)
+                {
+                    <input type="hidden" asp-for="Product.Id" />
+                }
+                <input type="file" class="hidden" asp-for="Photos" id="photos-container" />
+                <input type="hidden" asp-for="Product.ImagePath" id="image-path-str" />
+
+                <div class="form-group row mb-5">
+                    <div class="col-2">
+                        <label asp-for="Product.ProductName" class="control-label font-weight-bold"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Product.ProductName" class="form-control" required maxlength="100" />
+                        <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-5">
+                    <div class="col-2">
+                        <label asp-for="Product.Desciption" class="control-label font-weight-bold"></label>
+                    </div>
+                    <div class="col-8">
+                        <textarea asp-for="Product.Desciption" class="form-control" required="required" maxlength="1000"></textarea>
+                        <span asp-validation-for="Product.Desciption" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-5">
+                    <div class="col-2">
+                        <label asp-for="Product.CategoryId" class="control-label font-weight-bold"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="Product.CategoryId" asp-items="Model.CategoryList" required="required" class="form-control">
+                            <option value="">Select Category</option>
+                        </select>
+                        <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-5">
+                    <div class="col-2">
+                        <label asp-for="Product.Stock" class="control-label font-weight-bold"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Product.Stock" class="form-control" />
+                        <span asp-validation-for="Product.Stock" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-5">
+                    <div class="col-2">
+                        <label asp-for="Product.Price" class="control-label font-weight-bold"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Product.Price" class="form-control" />
+                        <span asp-validation-for="Product.Price" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-5">
+                    <div class="col-2">
+                        <label asp-for="Product.IsBoxOrPack" class="control-label font-weight-bold"></label>
+                    </div>
+                    <div class="col-8">
+                        @*<label class="mr-4">
+                                <input type="checkbox" name="Type" asp-for="Product.IsBoxOrPack" class="form-control">
+                                <i class="fas fa-box-open fa-3x text-black-50" title="The product is sold in packs"></i>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="Type" class="form-control">
+                                <i class="fas fa-balance-scale-right fa-3x text-black-50" title="The product is sold in different weights"></i>
+                            </label>*@
+                        <label class="switch-for-box">
+                            <input type="checkbox" class="form-control" asp-for="Product.IsBoxOrPack" />
+                            <span class="slider-for-box pl-2">
+                                <i class="fas fa-box-open fa-2x mr-2 mt-2" title="The product is sold in packs"></i>
+                                <i class="fas fa-balance-scale-right fa-2x mt-2" title="The product is sold in different weights"></i>
+                            </span>
+                        </label>
+                        @*<label class="switch">
+                                <input type="checkbox" class="default" asp-for="Product.IsBoxOrPack">
+                                <span class="slider"></span>
+                                <i class="fas fa-balance-scale-right text-black-50" title="The product is sold in different weights"></i>
+                            </label>*@
+                        <span asp-validation-for="Product.IsBoxOrPack" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row mb-5" onload="alert('sss')">
+                    <div class="col-2 font-weight-bold">
+                        <label asp-for="Photos" class="control-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <div class="input-images" multiple accept=".png,.svg,.jpg,.jpeg"></div>
+                    </div>
+                </div>
+                @if (!Model.Product.IsActive && Model.Product.Id != 0)
+                {
+                    <div class="form-group row mb-5">
+                        <div class="col-2">
+                            <label class="control-label font-weight-bold"> Activate Category</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="switch">
+                                <input type="checkbox" asp-for="Product.IsActive" class="default">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                }
+                @if (Model.Product.Id == 0)
+                {
+                    <div class="form-group row justify-content-center mb-5">
+                        <button type="submit" class="btn btn-lg btn-outline-info mr-2"><i class="far fa-save"></i> Save</button>
+                        <a role="button" class="btn btn-lg btn-outline-info mr-2" asp-action="Index"><i class="fas fa-times"></i> Back to List</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group row justify-content-center mb-5">
+                        @if (Model.Product.IsActive)
+                        {
+                            <button type="button" class="btn btn-lg btn-outline-danger mr-2" onclick=DeleteConfirm("/Admin/Category/SoftDelete/@Model.Product.Id")><i class="far fa-trash-alt"></i> Soft Delete</button>
+                        }
+                        <button type="submit" onclick="GetImageData()" class="btn btn-lg btn-outline-info mr-2"><i class="far fa-save"></i> Update</button>
+                        <a role="button" class="btn btn-lg btn-outline-secondary mr-2" asp-action="Index"><i class="fas fa-times"></i> Back to List</a>
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+</div>
+
+@section _Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Admin/Product.js"></script>
+    <script>
+        var preloaded = [];
+        var preloadedModified = [];
+        var updatedPreloaded = "";
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar: 'file edit format'
+        });
+
+        $(window).on("load", function (e) {
+            e.preventDefault();
+            var imagesPath = $('#image-path-str').val();
+            if (imagesPath !== null || imagesPath !== '') {
+                var SplitImagePath = imagesPath.split('~');
+                SplitImagePath.map((el, i) => {
+                    if (el != "") {
+                        preloaded.push({ id: 'old-' + i, src: el });
+                    }
+                });
+            }
+            $('.input-images').imageUploader({
+                preloaded: preloaded,
+                imagesInputName: 'photos',
+                preloadedInputName: 'old'
+            });
+        });
+
+        function GetImageData() {
+            let $imageInput = $('.input-images');
+            let $inputPreloaded = $imageInput.find('input[name^="old"]');
+            if ($inputPreloaded.length) {
+
+                // Get the ids
+                for (let iP of $inputPreloaded) {
+                    if (iP.value.includes('old')) {
+                        preloadedModified.push({ id: iP.value });
+                    }
+                }
+                for (let ids of preloadedModified) {
+                    var imagePath = preloaded.filter(x => x.id == ids.id)[0].src;
+                    updatedPreloaded += imagePath + '~';
+                }
+            }
+            var imgPathString = document.getElementById('image-path-str');
+            imgPathString.value = updatedPreloaded;
+        }
+    </script>
+
+}

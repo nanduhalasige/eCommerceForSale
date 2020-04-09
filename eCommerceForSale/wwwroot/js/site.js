@@ -1,4 +1,18 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿//Show loading icon and hide
+var spinnerVisible = false;
+function showProgress() {
+    if (!spinnerVisible) {
+        $("div#spinner").fadeIn("fast");
+        spinnerVisible = true;
+    }
+};
 
-// Write your JavaScript code.
+function hideProgress() {
+    if (spinnerVisible) {
+        var spinner = $("div#spinner");
+        spinner.stop();
+        spinner.fadeOut("fast");
+        spinnerVisible = false;
+    }
+};
+
