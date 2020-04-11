@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using eCommerceForSale.Utility
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,14 +35,17 @@
                                 Home
                             </a>
                         </li>
-                        <li class="mr-3 nav-item @(ViewContext.RouteData.Values["Area"]?.ToString() == "Admin" ? "active" : "")">
-                            <a class="nav-link"
-                               asp-area="Admin"
-                               asp-controller="Company"
-                               asp-action="Index">
-                                Admin
-                            </a>
-                        </li>
+                        @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.EmployeeRole))
+                        {
+                            <li class="mr-3 nav-item @(ViewContext.RouteData.Values["Area"]?.ToString() == "Admin" ? "active" : "")">
+                                <a class="nav-link"
+                                   asp-area="Admin"
+                                   asp-controller="Company"
+                                   asp-action="Index">
+                                    Admin
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -1,31 +1,20 @@
-﻿var ProductTable;
+﻿var UsersTable;
 $(document).ready(function () {
     LoadUserDatatable();
 })
 
 function LoadUserDatatable() {
     UsersTable = $("#UsersTable").DataTable({
-        "order": [],
         "ajax": {
-            "url": "/Admin/Users/GetAll",
-            "cache": true,
-            "async": true,
-            "dataSrc": ""
+            url: "/Admin/Users/GetAll",
+            dataSrc: ""
         },
         "responsive": true,
         "columns": [
-            {
-                "data": "fullName"
-            },
-            {
-                "data": "email"
-            },
-            {
-                "data": "phoneNumber"
-            },
-            {
-                "data": "role"
-            },
+            { "data": "fullName" },
+            { "data": "email" },
+            { "data": "phoneNumber" },
+            { "data": "role" },
             {
                 "orderable": false,
                 "data": { id: "id", lockoutEnd: "lockoutEnd" },

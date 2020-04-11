@@ -2,12 +2,15 @@
 using System.Threading.Tasks;
 using eCommerceForSale.Data.Repositories.IRepositories;
 using eCommerceForSale.Entity.Models;
+using eCommerceForSale.Utility;
 using eCommerceForSale.Utility.Helper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerceForSale.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Constants.AdminRole)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork unitOfWork;

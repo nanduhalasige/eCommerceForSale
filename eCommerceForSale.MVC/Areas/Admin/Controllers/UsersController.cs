@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eCommerceForSale.Data.Data;
+using eCommerceForSale.Entity.Models;
+using eCommerceForSale.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerceForSale.MVC.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = Constants.AdminRole)]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -24,7 +29,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
         #region API Calls
 
         [HttpGet]
-        public IActionResult GetAll()
+        public List<ApplicationUser> GetAll()
         {
             var appUsers = _db.ApplicationUsers.ToList();
             var userRoles = _db.UserRoles.ToList();
@@ -35,7 +40,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
                 user.Role = roles.FirstOrDefault(r => r.Id.Equals(roleId)).Name;
             }
 
-            return Json(new { data = appUsers });
+            return appUsers;
         }
 
         [HttpPost]

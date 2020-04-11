@@ -31,9 +31,26 @@ namespace eCommerceForSale.MVC
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<EmailOptions>(Configuration);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+            services.AddAuthentication().AddFacebook(option =>
+            {
+                option.AppId = "236508214134926";
+                option.AppSecret = "e41f3ecd90ebe06ef7ce797a56f866af";
+            });
+            services.AddAuthentication().AddGoogle(option =>
+            {
+                option.ClientId = "255362192942-0f46uml25k4i61a6la0ivra60ps7grto.apps.googleusercontent.com";
+                option.ClientSecret = "DfyIunhEmXXD3xhxZhoP6jzV";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
