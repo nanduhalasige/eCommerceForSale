@@ -9,7 +9,7 @@ namespace eCommerceForSale.Data.Repositories.IRepositories
 {
     public interface IRepository<T> where T : class
     {
-        T Get(int id);
+        T Get(Guid id);
 
         Task<IEnumerable<T>> GetAll(
             Expression<Func<T, bool>> filter = null,
@@ -26,7 +26,7 @@ namespace eCommerceForSale.Data.Repositories.IRepositories
 
         void AddRange(IQueryable<T> entities);
 
-        void Remove(int id);
+        void Remove(Guid id);
 
         void RemoveRange(IQueryable<T> entities);
     }

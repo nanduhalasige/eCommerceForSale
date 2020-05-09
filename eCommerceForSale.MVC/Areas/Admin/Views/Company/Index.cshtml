@@ -81,7 +81,7 @@
                         <a role="button" asp-action="Index" class="btn btn-outline-primary">Cancel</a>
                     </div>
                 }
-                @if ((Model.Company.Id == 0 || Model.Company == null) && !Model.EnableControls)
+                @if ((Model.Company.Id == Guid.Empty || Model.Company == null) && !Model.EnableControls)
                 {
                     <div class="form-group row mb-5 justify-content-end">
                         <a role="button" asp-action="AddOrModifyCompany" class="btn btn-outline-primary">
@@ -90,7 +90,7 @@
                         @*<a role="button" asp-action="Index" class="btn btn-primary">Cancel</a>*@
                     </div>
                 }
-                @if (Model.Company.Id != 0 && Model.Company != null && !Model.EnableControls)
+                @if (Model.Company.Id != Guid.Empty && Model.Company != null && !Model.EnableControls)
                 {
                     <div class="form-group row  mb-5 justify-content-end">
                         <a role="button" asp-action="AddOrModifyCompany" asp-route-Id="@Model.Company.Id" class="btn btn-primary mr-2">

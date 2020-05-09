@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-10 m-2 mt-5">
             <div class="text-center text-success mb-5">
-                @if (Model.Id != 0)
+                @if (Model.Id != Guid.Empty)
                 {
                     <h3>Update Category</h3>
                     <input type="hidden" asp-for="Id" />
@@ -18,7 +18,7 @@
                 }
             </div>
             <form asp-action="AddOrModifyCategory">
-                @if (Model.Id != 0)
+                @if (Model.Id != Guid.Empty)
                 {
                     <input type="hidden" asp-for="Id" />
                 }
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                @if (!Model.IsActive && Model.Id != 0)
+                @if (!Model.IsActive && Model.Id != Guid.Empty)
                 {
                     <div class="form-group row mb-5">
                         <div class="col-md-2">
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 }
-                @if (Model.Id == 0)
+                @if (Model.Id == Guid.Empty)
                 {
                     <div class="form-group row justify-content-center mb-5">
                         <button type="submit" class="btn btn-lg btn-outline-info mr-2"><i class="far fa-save"></i> Save</button>

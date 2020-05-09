@@ -49,7 +49,7 @@ namespace eCommerceForSale.Data.Repositories
             return query.FirstOrDefault();
         }
 
-        public T Get(int id)
+        public T Get(Guid id)
         {
             return dbSet.Find(id);
         }
@@ -80,7 +80,7 @@ namespace eCommerceForSale.Data.Repositories
             return await query.ToListAsync();
         }
 
-        public void Remove(int id)
+        public void Remove(Guid id)
         {
             var entity = dbSet.Find(id);
             dbSet.Remove(entity);

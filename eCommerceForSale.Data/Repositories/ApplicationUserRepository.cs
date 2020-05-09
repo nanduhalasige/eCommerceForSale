@@ -11,32 +11,11 @@ namespace eCommerceForSale.Data.Repositories
     internal class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUserRepository
 
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
-        public ApplicationUserRepository(ApplicationDbContext _context) : base(_context)
+        public ApplicationUserRepository(ApplicationDbContext context) : base(context)
         {
-            context = _context;
+            _context = context;
         }
-
-        public void softDelete(int id)
-        {
-            var CategoryObj = context.Categories.FirstOrDefault(x => x.Id.Equals(id));
-            if (CategoryObj != null)
-            {
-                CategoryObj.IsActive = false;
-                context.Update(CategoryObj);
-            }
-        }
-
-        //public void Update(ApplicationUser applicationUser)
-        //{
-        //    var CategoryObj = context.Categories.FirstOrDefault(x => x.Id.Equals(applicationUser.Id));
-        //    if (CategoryObj != null)
-        //    {
-        //        CategoryObj.CategoryName = applicationUser.CategoryName;
-        //        CategoryObj.IsActive = applicationUser.IsActive;
-        //        context.Update(CategoryObj);
-        //    }
-        //}
     }
 }

@@ -3,26 +3,39 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
-    @foreach (Product item in Model)
-    {
-        <div class="col-md-3">
-            <figure class="card card-product">
-                <div class="img-wrap">
-                    <img src="@item.ImagePath.Split('~')[0]" width="250" height="400" style="object-fit:cover">
-                    @*<a class="btn-overlay" href="#"><i class="fa fa-search-plus"></i> Quick view</a>*@
+<div class="container-fluid">
+    <div class="row">
+        @foreach (Product item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card product-card border-0" style="width: 18rem; height:20rem;">
+                    <a asp-area="Customer" asp-controller="Home" asp-action="Product" asp-route-id="@item.Id" role="button" class="text-dark">
+                        <img class="card-img-top" src="@item.ImagePath.Split('~')[0]" alt="product" style="object-fit:cover">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">@item.ProductName</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="h5">
+                                        <span class="price-new">&#122;&#322; @item.Price</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="rating">
+                                        <div class="stars">
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star"></span>
+                                        </div>
+                                        <span class="review-no">41 reviews</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <figcaption class="info-wrap">
-                    <h6 class="title text-dots"><a href="#">@item.ProductName</a></h6>
-                    <div class="action-wrap">
-                        <a href="#" class="btn btn-primary btn-sm float-right"> Order </a>
-                        <div class="price-wrap h5">
-                            <span class="price-new">&#8377 @item.Price</span>
-                            @*<del class="price-old">$1980</del>*@
-                        </div> <!-- price-wrap.// -->
-                    </div> <!-- action-wrap -->
-                </figcaption>
-            </figure> <!-- card // -->
-        </div> <!-- col // -->
-    }
+            </div>
+        }
+    </div>
 </div>

@@ -13,12 +13,12 @@ function LoadProductDatatable() {
         },
         "responsive": true,
         "columns": [
-            {
-                "orderable": false,
-                "data": function (row, type, val, meta) {
-                    return `<a role="button" class="pointer" onclick="setdata($(this))" data-toggle="modal" data-row='${JSON.stringify(row)}' data-target="#ProductDetailsModal"><i class="fas fa-expand text-info"></i></a>`;
-                }
-            },
+            //{
+            //    "orderable": false,
+            //    "data": function (row, type, val, meta) {
+            //        return `<a role="button" class="pointer" onclick="setdata($(this))" data-toggle="modal" data-row='${JSON.stringify(row)}' data-target="#ProductDetailsModal"><i class="fas fa-expand text-info"></i></a>`;
+            //    }
+            //},
             {
                 "data": "productName"
             },

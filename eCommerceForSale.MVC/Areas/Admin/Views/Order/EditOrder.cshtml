@@ -1,0 +1,263 @@
+﻿@model OrderHeaderVM
+@using eCommerceForSale.Utility
+@using System.Security.Claims;
+
+@{
+    Layout = "~/Views/Shared/_LayoutConfig.cshtml";
+    var claimsIdentity = (ClaimsIdentity)User.Identity;
+    var claims = claimsIdentity.FindFirst(ClaimTypes.Role);
+}
+
+<div class="container">
+    <form method="post">
+        <input type="hidden" asp-for="OrderHeader.Id" />
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0 row container">
+                <div class="col-6">
+                    <i class="fa fa-cog"></i> &nbsp;
+                    Order Management
+                </div>
+                <div class="col-6 text-right">
+                    <a class="btn btn-outline-light btn-sm">Back to List</a>
+                </div>
+            </div>
+            <div class="card-body summary-body">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Order Information</span>
+                                </h4>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.OrderDate" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    <input value="@Model.OrderHeader.OrderDate.ToShortDateString()" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.OrderStatus" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.OrderStatus" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.OrderStatus" class="form-control" readonly>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.PaymentDate" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    <input value="@Model.OrderHeader.PaymentDate.ToShortDateString()" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.PaymentStatus" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.PaymentStatus" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.PaymentStatus" class="form-control" readonly>
+
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.PaymentDate" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+
+                                    <input asp-for="OrderHeader.PaymentDate" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.Address.FullName" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.Address.FullName" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.Address.FullName" class="form-control" readonly>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.Address.AddressLine1" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.Address.AddressLine1" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.Address.AddressLine1" class="form-control" readonly>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.Address.AddressLine2" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.Address.AddressLine2" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.Address.AddressLine2" class="form-control" readonly>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.Address.PostCode" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.Address.PostCode" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.Address.PostCode" class="form-control" readonly>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.Address.MobileNumber" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.Address.MobileNumber" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.Address.MobileNumber" class="form-control" readonly>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.Address.MobileNumber" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+                                    @if (claims.Value == Constants.AdminRole)
+                                    {
+                                        <input asp-for="OrderHeader.Address.MobileNumber" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.Address.MobileNumber" class="form-control" readonly>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.TansactionId" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+
+                                    <input asp-for="OrderHeader.TansactionId" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.Carrier" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+
+                                    <input asp-for="OrderHeader.Carrier" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-4">
+                                    <label asp-for="OrderHeader.TrackingNumber" class="control-label font-weight-bold"></label>
+                                </div>
+                                <div class="col-8">
+
+                                    <input asp-for="OrderHeader.TrackingNumber" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-info">Order Summary:</span>
+                            </h4>
+                            <ul class="list-group mb-3">
+                                @foreach (var orderdetail in Model.OrderDetails)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div class="col-12 col-md-8">
+                                            <h6 class="my-0">@orderdetail.Product.ProductName</h6>
+                                            <small class="text-muted">Quantity: @orderdetail.Count</small>
+                                        </div>
+                                        <div class="col-12 col-md-4 text-right">
+                                            <span class="text-muted">&#8377 @orderdetail.Price</span>
+                                        </div>
+                                        <hr />
+                                    </li>
+                                }
+                                <li class="list-group-item d-flex justify-content-between bg-light">
+                                    <small class="text-info">Total (INR)</small>
+                                    <strong class="text-info">&#8377  @Model.OrderHeader.OrderTotal</strong>
+                                </li>
+                            </ul>
+
+                            @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.EmployeeRole))
+                            {
+                                <br />
+                                @if (Model.OrderHeader.OrderStatus == Constants.StatusApproved)
+                                {
+                                    <a role="button" asp-action="StartProcessing" asp-route-id="@Model.OrderHeader.Id"
+                                       class="btn btn-outline-primary form-control">Start Processing</a>
+                                }
+                                @if (Model.OrderHeader.OrderStatus == Constants.StatusProcessing)
+                                {
+                                    <input type="submit" value="Ship Order" onclick="validateInput()"
+                                           class="form-control btn btn-outline-primary" formmethod="post" formaction="Admin/Order/ShipOrder" />
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row justify-content-end">
+                    <div class="col-12 col-md-4">
+                        <button type="submit" value="Place Order" class="btn btn-success form-control">Update Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section _Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Admin/Order.js"></script>
+}

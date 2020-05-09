@@ -9,6 +9,6 @@ namespace eCommerceForSale.Data.Repositories.IRepositories
     {
         void Update(Category category);
 
-        void softDelete(int id);
+        void softDelete(Guid id);
     }
 }

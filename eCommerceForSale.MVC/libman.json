@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "mdbootstrap@4.16.0",
+      "destination": "wwwroot/lib/mdbootstrap/"
+    },
+    {
+      "library": "highcharts@8.0.4",
+      "destination": "wwwroot/lib/highcharts/"
+    }
+  ]
+}

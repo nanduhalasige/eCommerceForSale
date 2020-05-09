@@ -17,7 +17,7 @@ namespace eCommerceForSale.Data.Repositories
             context = _context;
         }
 
-        public void softDelete(int id)
+        public void softDelete(Guid id)
         {
             var ProductObj = context.Products.FirstOrDefault(x => x.Id.Equals(id));
             if (ProductObj != null)

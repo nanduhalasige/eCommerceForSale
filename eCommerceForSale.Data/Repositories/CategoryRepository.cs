@@ -1,6 +1,7 @@
 ﻿using eCommerceForSale.Data.Data;
 using eCommerceForSale.Data.Repositories.IRepositories;
 using eCommerceForSale.Entity.Models;
+using System;
 using System.Linq;
 
 namespace eCommerceForSale.Data.Repositories
@@ -14,7 +15,7 @@ namespace eCommerceForSale.Data.Repositories
             context = _context;
         }
 
-        public void softDelete(int id)
+        public void softDelete(Guid id)
         {
             var CategoryObj = context.Categories.FirstOrDefault(x => x.Id.Equals(id));
             if (CategoryObj != null)

@@ -13,5 +13,8 @@ namespace eCommerceForSale.Entity.ViewModels
 
         [Display(Name = "Display Images")]
         public List<IFormFile> Photos { get; set; }
+
+        public IEnumerable<ProductWeight> ProductWeights { get; set; }
+        public PriceForWeight PriceForWeights { get; set; }
     }
 }

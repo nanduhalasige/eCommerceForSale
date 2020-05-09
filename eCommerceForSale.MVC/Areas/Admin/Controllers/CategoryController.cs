@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using eCommerceForSale.Data.Repositories.IRepositories;
 using eCommerceForSale.Entity.Models;
@@ -11,6 +12,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = Constants.AdminRole)]
+    [Authorize(Roles = Constants.EmployeeRole)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -25,7 +27,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult AddOrModifyCategory(int? id)
+        public IActionResult AddOrModifyCategory(Guid? id)
         {
             var category = new Category();
             if (id == null)
@@ -56,7 +58,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
             string message = "";
             if (ModelState.IsValid)
             {
-                if (category.Id == 0)
+                if (category.Id == null || category.Id == new Guid())
                 {
                     category.IsActive = true;
                     unitOfWork.Category.Add(category);
@@ -68,13 +70,13 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
                     message = "Category updated";
                 }
                 unitOfWork.Save();
-                return RedirectToAction(nameof(Index)).WithSuccess(category.Id == 0 ? message : message);
+                return RedirectToAction(nameof(Index)).WithSuccess(message);
             }
             return View(category);
         }
 
         [HttpDelete]
-        public IActionResult SoftDelete(int id)
+        public IActionResult SoftDelete(Guid id)
         {
             var category = unitOfWork.Category.Get(id);
             if (category == null)
@@ -87,7 +89,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public IActionResult HardDelete(int id)
+        public IActionResult HardDelete(Guid id)
         {
             var category = unitOfWork.Category.Get(id);
             if (category == null)

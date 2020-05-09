@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Resources;
 
 namespace eCommerceForSale.Entity.Models
 {
     public class Category
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Category Name")]
         [Required(ErrorMessage = "Category name is essential")]

@@ -1,0 +1,34 @@
+﻿@model eCommerceForSale.Entity.Models.OrderHeader
+
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6" style="text-align-last: center;">
+            <img src="~/asset/images/undraw_order_confirmed_aaw7.svg" alt="confirmed" height="250" />
+        </div>
+        <div class="col-12 col-md-6 text-success font-weight-bold" style="align-self: center;">
+            <p>
+                Hurrey... Dear @Model.ApplicationUser.FullName, your order is confirmed.
+            </p>
+            <p>
+                Thank you from shopping with us.
+                <a asp-area="Customer" asp-controller="Home" asp-action="Index">Click here</a> to continue shopping.
+            </p>
+            <ul class="list-unstyled">
+                <li>
+                    Order Id: @Model.Id
+                </li>
+                <li class="row">
+                    Delivery address: &nbsp;<span>
+                        <strong>@Model.Address.MobileNumber &nbsp;</strong> <br />
+                        @Model.Address.AddressLine1 <br />
+                        @Model.Address.AddressLine2 - @Model.Address.PostCode
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

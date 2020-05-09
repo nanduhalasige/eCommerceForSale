@@ -1,0 +1,122 @@
+﻿@model ShoppingCartVM
+@using Microsoft.Extensions.Options
+
+@inject IOptions<eCommerceForSale.Utility.StripeOptions> Stripe
+@{
+    ViewData["Title"] = "Summary";
+}
+
+<form method="post">
+    <br />
+    <div class="backgroundWhiteBorder">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Order Summary
+                    </div>
+                    <div class="col-6 text-right">
+                        <a class="btn btn-outline-light btn-sm">Back to Cart</a>
+                    </div>
+                </div>
+                <div class="card-body summary-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Delivery address:</span>
+                                    </h4>
+                                </div>
+                                @foreach (var address in Model.Addresses)
+                                {
+                                    var addressLine2 = address.AddressLine2 + " - " + address.PostCode;
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio"
+                                               id="@("deliveryaddress"+ address.Id)"
+                                               asp-for="@Model.AddressId"
+                                               value="@address.Id"
+                                               class="custom-control-input"
+                                               checked="@address.IsDefault">
+                                        <label class="custom-control-label"
+                                               for="@("deliveryaddress"+ address.Id)">
+                                            <span>
+                                                <strong>@address.FullName &nbsp;</strong> &minus; @address.MobileNumber <br />
+                                                @address.AddressLine1 <br />
+                                                @addressLine2
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <hr />
+                                }
+                                <div class="box-shadow-dark p-2 pointer mt-2" role="button" data-toggle="modal" data-target="#AddessModal" onclick="LaunchAddressModal()">
+                                    <i class="fas fa-plus"></i>&nbsp; Add new Address
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-5 offset-lg-1">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Order Summary:</span>
+                                </h4>
+                                <ul class="list-group mb-3">
+                                    @foreach (var cart in Model.CartList)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <div class="col-12 col-md-8">
+                                                <h6 class="my-0">@cart.Product.ProductName</h6>
+                                                <small class="text-muted">Quantity: @cart.Count</small>
+                                            </div>
+                                            <div class="col-12 col-md-4 text-right">
+                                                <span class="text-muted">&#122;&#322; @cart.Price</span>
+                                            </div>
+                                            <hr />
+                                        </li>
+                                    }
+                                    <li class="list-group-item d-flex justify-content-between bg-light">
+                                        <small class="text-info">Total (PLN)</small>
+                                        <strong class="text-info">&#122;&#322;  @Model.OrderHeader.OrderTotal</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-8 pt-2">
+                            <p style="color:maroon; font-size:14px;">Estimate Arrival Date: @DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()</p>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            @{
+                                var OrderTotalForStripe = Model.OrderHeader.OrderTotal * 100;
+                            }
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="@Stripe.Value.Publishablekey"
+                                    data-amount="@OrderTotalForStripe"
+                                    data-currency="PLN"
+                                    data-name="eCommerce for Sale"
+                                    data-description="Get the products online fastre"
+                                    data-local="auto"
+                                    data-allow-remember-me="false"
+                                    data-label="Place order"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
+                            </script>
+                            <script>
+                                document.getElementsByClassName("stripe-button-el")[0].style.display = "none";
+                            </script>
+                            <button type="submit" value="Place Order" class="btn btn-success form-control">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="modal-placeholder"></div>
+
+<partial name="_AddressModalPopup" />
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Customer/ShoppingCart.js"></script>
+}

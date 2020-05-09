@@ -1,0 +1,44 @@
+﻿@model eCommerceForSale.Entity.Models.Address
+
+<form asp-action="AddOrModifyAddress">
+    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+    <div class="row">
+        <div class="col-md-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label font-weight-bold required"></label>
+                <input asp-for="FullName" class="form-control" placeholder="Enter Full Name" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressLine1" class="control-label font-weight-bold required"></label>
+                <input asp-for="AddressLine1" class="form-control" placeholder="Enter House No., Street, Locality" />
+                <span asp-validation-for="AddressLine1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressLine2" class="control-label font-weight-bold required"></label>
+                <input asp-for="AddressLine2" class="form-control" placeholder="Enter City, State" />
+                <span asp-validation-for="AddressLine2" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="PostCode" class="control-label font-weight-bold required"></label>
+                    <input asp-for="PostCode" class="form-control" placeholder="Postal code" />
+                    <span asp-validation-for="PostCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="MobileNumber" class="control-label font-weight-bold required"></label>
+                    <input asp-for="MobileNumber" class="form-control" placeholder="Ex: 9480XXXXXX" />
+                    <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" asp-for="IsDefault">
+                    <label class="custom-control-label" asp-for="IsDefault">@Html.DisplayNameFor(model => model.IsDefault)</label>
+                </div>
+                <small>This address will be made primary address</small>
+            </div>
+        </div>
+    </div>
+</form>

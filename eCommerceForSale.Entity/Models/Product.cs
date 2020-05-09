@@ -6,7 +6,7 @@ namespace eCommerceForSale.Entity.Models
 {
     public class Product
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Product Name")]
         [Required(ErrorMessage = "Product name is essential")]
@@ -15,14 +15,13 @@ namespace eCommerceForSale.Entity.Models
 
         [Display(Name = "Product Description")]
         [Required(ErrorMessage = "Product description is essential")]
-        [MaxLength(1000, ErrorMessage = "Description cannot have more than 1000 character")]
         public string Desciption { get; set; }
 
         public string ImagePath { get; set; }
 
         [Display(Name = "Category of the product")]
         [Required(ErrorMessage = "Please select category")]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }

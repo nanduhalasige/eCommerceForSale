@@ -1,4 +1,7 @@
 ﻿@using eCommerceForSale.Utility
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - eCommerceForSale</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    @*<link href="~/lib/mdbootstrap/css/mdb.min.css" rel="stylesheet" />*@
+    <link href="~/lib/bootstrap-sidebar/simple-sidebar.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.semanticui.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link href="~/lib/image-uploader/src/image-uploader.css" rel="stylesheet" />
+    @*<link href="~/lib/jquery-zoom-image-carousel/style.css" rel="stylesheet" />*@
 </head>
 <body>
     <header>
@@ -20,12 +26,15 @@
                 <a class="navbar-brand mr-3" asp-area="Customer" asp-controller="Home" asp-action="Index">
                     <img src="~/asset/images/logo.png" alt="eCommerceForSale logo" height="25" />
                 </a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
+
                     <ul class="navbar-nav flex-grow-1">
                         <li class="mr-3 nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
                             <a class="nav-link"
@@ -40,20 +49,58 @@
                             <li class="mr-3 nav-item @(ViewContext.RouteData.Values["Area"]?.ToString() == "Admin" ? "active" : "")">
                                 <a class="nav-link"
                                    asp-area="Admin"
-                                   asp-controller="Company"
+                                   asp-controller="Dashboard"
                                    asp-action="Index">
                                     Admin
                                 </a>
                             </li>
                         }
+                        @if (@HttpContextAccessor.HttpContext.Session.GetInt32(Constants.ShoppingCartSession) != null)
+                        {
+                            <li class="nav-item mr-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ShoppingCart" ? "active" : "")">
+                                <a class="nav-link"
+                                   asp-area="Customer"
+                                   asp-controller="ShoppingCart"
+                                   asp-action="Index">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp;(@HttpContextAccessor.HttpContext.Session.GetInt32(Constants.ShoppingCartSession))
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item mr-3">
+                                <a class="nav-link"
+                                   asp-area="Customer"
+                                   asp-controller="ShoppingCart"
+                                   asp-action="Index">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
+                @*<form class="mr-2 my-auto w-50 align-content-center d-inline-block order-1">
+                        <div class="input-group">
+                            <input type="text" class="form-control border border-right-0" placeholder="Search...">
+                            <span class="input-group-append">
+                                <button class="btn btn-outline-light border border-left-0" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>*@
+                @*<div class="d-flex justify-content-center h-100">
+                        <div class="searchbar">
+                            <input class="search_input" type="text" name="" placeholder="Search...">
+                            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                        </div>
+                    </div>*@
             </div>
         </nav>
         @*<partial name="_StatusMessage" />*@
     </header>
 
-    <div class="container-fluid">
+    <div class="container-fluid p-0" style="min-height:78vh">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -66,6 +113,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/lib/mdbootstrap/js/mdb.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -76,6 +124,7 @@
     <script src="https://kit.fontawesome.com/2c92887fad.js" crossorigin="anonymous"></script>
     <script src="https://cdn.tiny.cloud/1/8o3qnafq12r3ncz5izvyojr0msiwm5bkzylfwg3ijowpzsxs/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="~/lib/image-uploader/src/image-uploader.js"></script>
+    <script src="~/lib/highcharts/highcharts.js"></script>
     @*@{await Html.RenderPartialAsync("_StatusMessage");}*@
 
     @if (IsSectionDefined("Scripts"))

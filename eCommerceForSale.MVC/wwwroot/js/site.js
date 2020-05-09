@@ -16,3 +16,17 @@ function hideProgress() {
     }
 };
 
+function GlobalProductSearch(event) {
+    debugger;
+
+    $.ajax({
+        url: "/Customer/Home/GlobalProductSearch",
+        data: JSON.stringify({ name: event.target.value }),
+        async: true,
+        type: "POST",
+        contentType: 'application/json',
+        success: function (data) {
+            console.log(data);
+        }
+    });
+}

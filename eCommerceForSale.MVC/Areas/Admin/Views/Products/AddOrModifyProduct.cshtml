@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-10 m-2 mt-5 ml-auto mr-auto">
             <div class="text-center text-success mb-5">
-                @if (Model.Product.Id != 0)
+                @if (Model.Product.Id != Guid.Empty)
                 {
                     <h3>Update Product</h3>
                 }
@@ -17,7 +17,7 @@
                 }
             </div>
             <form asp-action="AddOrModifyProduct" enctype="multipart/form-data">
-                @if (Model.Product.Id != 0)
+                @if (Model.Product.Id != Guid.Empty)
                 {
                     <input type="hidden" asp-for="Product.Id" />
                 }
@@ -38,7 +38,7 @@
                         <label asp-for="Product.Desciption" class="control-label font-weight-bold"></label>
                     </div>
                     <div class="col-8">
-                        <textarea asp-for="Product.Desciption" class="form-control" required="required" maxlength="1000"></textarea>
+                        <textarea asp-for="Product.Desciption" class="form-control" required="required"></textarea>
                         <span asp-validation-for="Product.Desciption" class="text-danger"></span>
                     </div>
                 </div>
@@ -60,16 +60,16 @@
                         <label asp-for="Product.Stock" class="control-label font-weight-bold"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Product.Stock" class="form-control" />
+                        <input asp-for="Product.Stock" class="form-control" min="0" />
                         <span asp-validation-for="Product.Stock" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row mb-5">
+                <div class="form-group row mb-5 hidden price-input">
                     <div class="col-2">
                         <label asp-for="Product.Price" class="control-label font-weight-bold"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Product.Price" class="form-control" />
+                        <input asp-for="Product.Price" class="form-control" min="0" />
                         <span asp-validation-for="Product.Price" class="text-danger"></span>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                                 <i class="fas fa-balance-scale-right fa-3x text-black-50" title="The product is sold in different weights"></i>
                             </label>*@
                         <label class="switch-for-box">
-                            <input type="checkbox" class="form-control" asp-for="Product.IsBoxOrPack" />
+                            <input type="checkbox" id="weigt-box" class="form-control" asp-for="Product.IsBoxOrPack" />
                             <span class="slider-for-box pl-2">
                                 <i class="fas fa-box-open fa-2x mr-2 mt-2" title="The product is sold in packs"></i>
                                 <i class="fas fa-balance-scale-right fa-2x mt-2" title="The product is sold in different weights"></i>
@@ -101,7 +101,35 @@
                         <span asp-validation-for="Product.IsBoxOrPack" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row mb-5" onload="alert('sss')">
+                <div id="checkbox-for-weights">
+                    <small>Not implimented</small>
+                    @*<ul class="text-center" style="list-style-type: none">
+                        @foreach (var weight in Model.ProductWeights)
+                        {
+                            <li class="d-inline-block">
+                                <input type="checkbox" class="hidden" id="@weight.Id" />
+                                <label class="weightbox-label" for="@weight.Id"><span class="weight-box" style="padding: 10px ; min-width:90px; border: 1px dashed #ddd"> @weight.Weight @weight.WeightUnit</span></label>
+                            </li>
+                        }*@
+                    @*<li class="d-inline-block">
+                            <input type="checkbox" id="cb1" />
+                            <label class="weightbox-label" for="cb1"><span class="weight-box" style="padding: 10px ; min-width:90px; border: 1px dashed #ddd"> 50gm</span></label>
+                        </li>
+                        <li class="d-inline-block">
+                            <input type="checkbox" id="cb2" />
+                            <label class="weightbox-label" for="cb2"><span class="weight-box" style="padding: 10px;min-width:90px; border: 1px dashed #ddd"> 250gm</span></label>
+                        </li>
+                        <li class="d-inline-block">
+                            <input type="checkbox" id="cb3" />
+                            <label class="weightbox-label" for="cb3"><span class="weight-box" style="padding: 10px;min-width:90px; border: 1px dashed #ddd"> 500gm</span></label>
+                        </li>
+                        <li class="d-inline-block">
+                            <input type="checkbox" id="cb4" />
+                            <label class="weightbox-label" for="cb4"><span class="weight-box" style="padding: 10px;min-width:90px; border: 1px dashed #ddd"> 1kg</span></label>
+                        </li>*@
+                    @*</ul>*@
+                </div>
+                <div class="form-group row mb-5">
                     <div class="col-2 font-weight-bold">
                         <label asp-for="Photos" class="control-label"></label>
                     </div>
@@ -109,7 +137,7 @@
                         <div class="input-images" multiple accept=".png,.svg,.jpg,.jpeg"></div>
                     </div>
                 </div>
-                @if (!Model.Product.IsActive && Model.Product.Id != 0)
+                @if (!Model.Product.IsActive && Model.Product.Id != Guid.Empty)
                 {
                     <div class="form-group row mb-5">
                         <div class="col-2">
@@ -123,7 +151,7 @@
                         </div>
                     </div>
                 }
-                @if (Model.Product.Id == 0)
+                @if (Model.Product.Id == Guid.Empty)
                 {
                     <div class="form-group row justify-content-center mb-5">
                         <button type="submit" class="btn btn-lg btn-outline-info mr-2"><i class="far fa-save"></i> Save</button>
@@ -196,6 +224,20 @@
             var imgPathString = document.getElementById('image-path-str');
             imgPathString.value = updatedPreloaded;
         }
+
+        $("#weigt-box").change(function (e) {
+            e.preventDefault();
+            if ($('#weigt-box').is(":checked")) {
+                $("#checkbox-for-weights").addClass("hidden");
+                $(".price-input").removeClass("hidden");
+            }
+            else {
+                $("#checkbox-for-weights").removeClass("hidden");
+                $(".price-input").addClass("hidden");
+            }
+        });
     </script>
 
 }
+
+@*$('input[name="locationthemes"]:checked')*@

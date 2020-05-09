@@ -40,7 +40,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
         }
 
         // GET: Company/Create
-        public ActionResult AddOrModifyCompany(int? Id)
+        public ActionResult AddOrModifyCompany(Guid? Id)
         {
             var companyView = new CompanyView()
             {
@@ -80,7 +80,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
                 }
                 company.LogoPath = @"\asset\images\" + fileName;
 
-                if (company.Id == 0)
+                if (company.Id == null || company.Id == new Guid())
                 {
                     unitOfWork.Company.Add(company);
                     message = "Company data added";

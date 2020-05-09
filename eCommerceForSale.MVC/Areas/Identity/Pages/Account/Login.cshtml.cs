@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using eCommerceForSale.Data.Repositories.IRepositories;
+using Microsoft.AspNetCore.Http;
+using eCommerceForSale.Utility;
 
 namespace eCommerceForSale.MVC.Areas.Identity.Pages.Account
 {
@@ -20,14 +23,16 @@ namespace eCommerceForSale.MVC.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, 
+        public LoginModel(SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         [BindProperty]
@@ -77,12 +82,21 @@ namespace eCommerceForSale.MVC.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                // This doesn't count login failures towards account lockout To enable password
+                // failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    var user = _unitOfWork.ApplicationUser.GetFirstOfDefault(x => x.Email.Equals(Input.Email));
+                    var cartCount = _unitOfWork.ShoppingCart.GetAll(x => x.ApplicationUserId.Equals(user.Id)).Result.Count();
+                    HttpContext.Session.SetInt32(Constants.ShoppingCartSession, cartCount);
+                    HttpContext.Session.SetString(Constants.NameOfUser, user.FullName);
+                    if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.AdminRole))
+                    {
+                        return LocalRedirect("Admin/Dashboard/Index");
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace eCommerceForSale.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = Constants.AdminRole)]
+    [Authorize(Roles = Constants.AdminRole + "," + Constants.EmployeeRole)]
     public class ProductsController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -33,7 +33,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult AddOrModifyProduct(int? id)
+        public IActionResult AddOrModifyProduct(Guid? id)
         {
             ProductVM productVM = new ProductVM()
             {
@@ -42,7 +42,8 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
                 {
                     Text = x.CategoryName,
                     Value = x.Id.ToString()
-                })
+                }),
+                ProductWeights = unitOfWork.ProductWeights.GetAll().Result.ToList()
             };
             if (id == null)
             {
@@ -105,7 +106,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
                 }
                 product.ImagePath = imagePathString + product.ImagePath;
                 product.CreatedOn = DateTime.Now;
-                if (product.Id == 0)
+                if (product.Id == null || product.Id == new Guid())
                 {
                     product.IsActive = true;
                     unitOfWork.Product.Add(product);
@@ -149,7 +150,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public IActionResult SoftDelete(int id)
+        public IActionResult SoftDelete(Guid id)
         {
             var Product = unitOfWork.Product.Get(id);
             if (Product == null)
@@ -162,7 +163,7 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public IActionResult HardDelete(int id)
+        public IActionResult HardDelete(Guid id)
         {
             var product = unitOfWork.Product.Get(id);
             if (product == null)

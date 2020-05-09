@@ -7,7 +7,7 @@ namespace eCommerceForSale.Entity.Models
 {
     public class Company
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Cannot proceed without Company name")]
         [Display(Name = "Company Name")]

@@ -10,6 +10,9 @@ using eCommerceForSale.Data.Repositories;
 using eCommerceForSale.Data.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using eCommerceForSale.Utility;
+using System;
+using Microsoft.AspNetCore.Routing;
+using Stripe;
 
 namespace eCommerceForSale.MVC
 {
@@ -31,7 +34,11 @@ namespace eCommerceForSale.MVC
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddSingleton<IEmailSender, EmailSender>();
+
             services.Configure<EmailOptions>(Configuration);
+            services.Configure<MasterDataOptions>(Configuration);
+            services.Configure<StripeOptions>(Configuration.GetSection("Stripe"));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
@@ -51,6 +58,13 @@ namespace eCommerceForSale.MVC
                 option.ClientId = "255362192942-0f46uml25k4i61a6la0ivra60ps7grto.apps.googleusercontent.com";
                 option.ClientSecret = "DfyIunhEmXXD3xhxZhoP6jzV";
             });
+
+            services.AddSession(option =>
+            {
+                option.IdleTimeout = TimeSpan.FromMinutes(30);
+                option.Cookie.HttpOnly = true;
+                option.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,12 +72,13 @@ namespace eCommerceForSale.MVC
         {
             if (env.IsDevelopment())
             {
+                //app.UseStatusCodePagesWithRedirects("/Customer/Home/Error/{0}");
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseStatusCodePagesWithRedirects("/Customer/Home/Error/{0}");
                 // The default HSTS value is 30 days. You may want to change this for production
                 // scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
@@ -73,6 +88,9 @@ namespace eCommerceForSale.MVC
 
             app.UseRouting();
 
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["Secretkey"];
+
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -81,8 +99,30 @@ namespace eCommerceForSale.MVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+
+                CreateCustomeRouting(endpoints);
+                //endpoints.MapControllerRoute(
+                //   name: "product",
+                //   pattern: "products/{id}",
+                //   defaults: new { area = "Customer", controller = "Home", action = "Product" }
+                //   );
+
                 endpoints.MapRazorPages();
             });
+        }
+
+        private void CreateCustomeRouting(IEndpointRouteBuilder endpoints)
+        {
+            endpoints.MapControllerRoute(
+                    name: "product",
+                    pattern: "products/{id}",
+                    defaults: new { area = "Customer", controller = "Home", action = "Product" }
+                    );
+            endpoints.MapControllerRoute(
+                   name: "cart",
+                   pattern: "user/shopping-cart",
+                   defaults: new { area = "Customer", controller = "ShoppingCart", action = "Index" }
+                   );
         }
     }
 }

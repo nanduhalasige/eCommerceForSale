@@ -1,0 +1,68 @@
+﻿@using eCommerceForSale.Utility
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "Index";
+
+    var claimsIdentity = (ClaimsIdentity)User.Identity;
+    var claims = claimsIdentity.FindFirst(ClaimTypes.Role);
+    if (claims.Value == Constants.AdminRole || claims.Value == Constants.EmployeeRole)
+    {
+        Layout = "~/Views/Shared/_LayoutConfig.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+}
+
+<div class="container mb-4 ml-3">
+    <div class="row mb-4 mt-3 mr-3 justify-content-end">
+        <ul class="list-unstyled list-group list-group-horizontal-sm">
+            <li>
+                <a style="text-decoration:none;"
+                   class="p-2 border"
+                   asp-controller="Order" asp-action="Index" asp-route-status="@Constants.StatusPending">@Constants.StatusPending</a>
+            </li>
+            <li>
+                <a style="text-decoration:none;"
+                   class="p-2 border"
+                   asp-controller="Order" asp-action="Index" asp-route-status="@Constants.StatusConfirmed">@Constants.StatusConfirmed</a>
+            </li>
+            <li>
+                <a style="text-decoration:none;"
+                   class="p-2 border"
+                   asp-controller="Order" asp-action="Index" asp-route-status="@Constants.StatusShipped">@Constants.StatusShipped</a>
+            </li>
+            <li>
+                <a style="text-decoration:none;"
+                   class="p-2 border"
+                   asp-controller="Order" asp-action="Index" asp-route-status="@Constants.StatusCompleted">@Constants.StatusCompleted</a>
+            </li>
+            <li>
+                <a style="text-decoration:none;"
+                   class="p-2 border"
+                   asp-controller="Order" asp-action="Index" asp-route-status="All">All</a>
+            </li>
+        </ul>
+    </div>
+    <table id="OrderTable" class="ui celled table text-center" style="width:100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Order Status</th>
+                <th>Amount</th>
+                <th>Complete</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section _Scripts{
+    <script src="~/js/Admin/Order.js"></script>
+}
