@@ -37,8 +37,6 @@ namespace eCommerceForSale.MVC
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     var masterDataOptions = services.GetRequiredService<IOptions<MasterDataOptions>>();
-                    //context.Database.EnsureCreated();
-                    InitializeMasterData.Initialize(context, masterDataOptions);
                 }
                 catch (Exception ex)
                 {

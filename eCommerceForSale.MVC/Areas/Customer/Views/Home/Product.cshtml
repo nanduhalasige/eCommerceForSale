@@ -2,7 +2,6 @@
 
 @{
     var imagePaths = Model.ShoppingCart.Product.ImagePath.Split('~').Where(x => !string.IsNullOrEmpty(x)).ToList();
-    //var description = Model.Product.Desciption.Substring(0, 99) + "...";
 }
 <div class="container-fliud p-2">
     <form method="post">

@@ -7,10 +7,10 @@
     <div class="row">
         @foreach (Product item in Model)
         {
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card product-card border-0" style="width: 18rem; height:20rem;">
                     <a asp-area="Customer" asp-controller="Home" asp-action="Product" asp-route-id="@item.Id" role="button" class="text-dark">
-                        <img class="card-img-top" src="@item.ImagePath.Split('~')[0]" alt="product" style="object-fit:cover">
+                        <img class="card-img-top" src="@item.ImagePath.Split('~')[0]" alt="product" style="max-height:12rem;">
                         <div class="card-body">
                             <h5 class="card-title text-center">@item.ProductName</h5>
                             <div class="row">

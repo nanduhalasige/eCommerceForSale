@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eCommerceForSale.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = Constants.AdminRole)]
-    [Authorize(Roles = Constants.EmployeeRole)]
+    [Authorize(Roles = Constants.AdminRole + "," + Constants.EmployeeRole)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -83,6 +82,11 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Error occured while deleting" });
             }
+            var productLinked = unitOfWork.Product.GetFirstOfDefault(c => c.CategoryId.Equals(id));
+            if (productLinked != null)
+            {
+                return Json(new { success = false, message = "Category is linked to Product. Can't Delete." });
+            }
             unitOfWork.Category.softDelete(id);
             unitOfWork.Save();
             return Json(new { success = true, message = "Category deactivated" });
@@ -95,6 +99,11 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
             if (category == null)
             {
                 return Json(new { success = false, message = "Error occured while deleting" });
+            }
+            var productLinked = unitOfWork.Product.GetFirstOfDefault(c => c.CategoryId.Equals(id));
+            if (productLinked != null)
+            {
+                return Json(new { success = false, message = "Category is linked to Product. Can't Delete." });
             }
             unitOfWork.Category.Remove(id);
             unitOfWork.Save();

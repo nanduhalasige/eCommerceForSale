@@ -102,6 +102,7 @@
 
     <div class="container-fluid p-0" style="min-height:78vh">
         <main role="main" class="pb-3">
+            <partial name="_StatusMessage" />
             @RenderBody()
         </main>
     </div>
@@ -131,7 +132,5 @@
     {
         @RenderSection("Scripts", required: true)
     }
-
-    @*<partial name="_StatusMessage" />*@
 </body>
 </html>

@@ -1,8 +1,5 @@
 ﻿using eCommerceForSale.Data.Data;
 using eCommerceForSale.Data.Repositories.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace eCommerceForSale.Data.Repositories
 {

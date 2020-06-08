@@ -24,6 +24,11 @@
                 <i class="far fa-building mr-2"></i>
                 Company
             </a>
+            <a class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Category" ? "active" : "")"
+               asp-area="Admin" asp-controller="Category" asp-action="Index">
+                <i class="fab fa-buromobelexperte mr-2"></i>
+                Category
+            </a>
             <a class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Products" ? "active" : "")"
                asp-area="Admin" asp-controller="Products" asp-action="Index">
                 <i class="fas fa-luggage-cart mr-2"></i>

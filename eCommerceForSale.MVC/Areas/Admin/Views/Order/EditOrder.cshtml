@@ -4,13 +4,11 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutConfig.cshtml";
-    var claimsIdentity = (ClaimsIdentity)User.Identity;
-    var claims = claimsIdentity.FindFirst(ClaimTypes.Role);
 }
 
 <div class="container">
     <form method="post">
-        <input type="hidden" asp-for="OrderHeader.Id" />
+        <input type="hidden" asp-for="@Model.OrderHeader.Id" />
         <div class="card">
             <div class="card-header bg-dark text-light ml-0 row container">
                 <div class="col-6">
@@ -43,7 +41,7 @@
                                     <label asp-for="OrderHeader.OrderStatus" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.OrderStatus" class="form-control">
                                     }
@@ -58,7 +56,7 @@
                                     <label asp-for="OrderHeader.PaymentDate" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    <input value="@Model.OrderHeader.PaymentDate.ToShortDateString()" class="form-control" readonly>
+                                    <input value="@Model.OrderHeader.PaymentDate.ToShortDateString()" id="PaymentDate" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -66,7 +64,7 @@
                                     <label asp-for="OrderHeader.PaymentStatus" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.PaymentStatus" class="form-control">
                                     }
@@ -79,11 +77,11 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <label asp-for="OrderHeader.PaymentDate" class="control-label font-weight-bold"></label>
+                                    <label asp-for="OrderHeader.ShippingDate" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
 
-                                    <input asp-for="OrderHeader.PaymentDate" class="form-control" readonly>
+                                    <input asp-for="OrderHeader.ShippingDate" id="ShippingDate" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -91,7 +89,7 @@
                                     <label asp-for="OrderHeader.Address.FullName" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.Address.FullName" class="form-control">
                                     }
@@ -106,7 +104,7 @@
                                     <label asp-for="OrderHeader.Address.AddressLine1" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.Address.AddressLine1" class="form-control">
                                     }
@@ -121,7 +119,7 @@
                                     <label asp-for="OrderHeader.Address.AddressLine2" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.Address.AddressLine2" class="form-control">
                                     }
@@ -136,7 +134,7 @@
                                     <label asp-for="OrderHeader.Address.PostCode" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.Address.PostCode" class="form-control">
                                     }
@@ -151,7 +149,7 @@
                                     <label asp-for="OrderHeader.Address.MobileNumber" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.Address.MobileNumber" class="form-control">
                                     }
@@ -166,7 +164,7 @@
                                     <label asp-for="OrderHeader.Address.MobileNumber" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-                                    @if (claims.Value == Constants.AdminRole)
+                                    @if (User.IsInRole(Constants.AdminRole))
                                     {
                                         <input asp-for="OrderHeader.Address.MobileNumber" class="form-control">
                                     }
@@ -190,8 +188,14 @@
                                     <label asp-for="OrderHeader.Carrier" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-
-                                    <input asp-for="OrderHeader.Carrier" class="form-control">
+                                    @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.EmployeeRole))
+                                    {
+                                        <input asp-for="OrderHeader.Carrier" id="Carrier" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.Carrier" class="form-control" readonly>
+                                    }
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -199,8 +203,14 @@
                                     <label asp-for="OrderHeader.TrackingNumber" class="control-label font-weight-bold"></label>
                                 </div>
                                 <div class="col-8">
-
-                                    <input asp-for="OrderHeader.TrackingNumber" class="form-control">
+                                    @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.EmployeeRole))
+                                    {
+                                        <input asp-for="OrderHeader.TrackingNumber" id="TrackingNumber" class="form-control">
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="OrderHeader.TrackingNumber" class="form-control" readonly>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -217,29 +227,29 @@
                                             <small class="text-muted">Quantity: @orderdetail.Count</small>
                                         </div>
                                         <div class="col-12 col-md-4 text-right">
-                                            <span class="text-muted">&#8377 @orderdetail.Price</span>
+                                            <span class="text-muted">&#122;&#322; @orderdetail.Price</span>
                                         </div>
                                         <hr />
                                     </li>
                                 }
                                 <li class="list-group-item d-flex justify-content-between bg-light">
-                                    <small class="text-info">Total (INR)</small>
-                                    <strong class="text-info">&#8377  @Model.OrderHeader.OrderTotal</strong>
+                                    <small class="text-info">Total (PLN)</small>
+                                    <strong class="text-info">&#122;&#322;  @Model.OrderHeader.OrderTotal</strong>
                                 </li>
                             </ul>
 
                             @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.EmployeeRole))
                             {
                                 <br />
-                                @if (Model.OrderHeader.OrderStatus == Constants.StatusApproved)
+                                @if (Model.OrderHeader.OrderStatus == Constants.StatusConfirmed)
                                 {
                                     <a role="button" asp-action="StartProcessing" asp-route-id="@Model.OrderHeader.Id"
                                        class="btn btn-outline-primary form-control">Start Processing</a>
                                 }
                                 @if (Model.OrderHeader.OrderStatus == Constants.StatusProcessing)
                                 {
-                                    <input type="submit" value="Ship Order" onclick="validateInput()"
-                                           class="form-control btn btn-outline-primary" formmethod="post" formaction="Admin/Order/ShipOrder" />
+                                    <input type="submit" value="Ship Order" onclick="validateInput(event)"
+                                           class="form-control btn btn-outline-primary" formmethod="post" formaction="/Admin/Order/ShipOrder/" />
                                 }
                             }
                         </div>
@@ -260,4 +270,37 @@
 @section _Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/Admin/Order.js"></script>
+    <script>
+        function validateInput(event) {
+            var trackingNo = document.getElementById("TrackingNumber").value;
+            var carrier = document.getElementById("Carrier").value;
+            if (trackingNo == "") {
+                swal("Error", "Please enter Tracking number", "error");
+                event.preventDefault();
+                return false;
+            } else {
+                if (carrier == "") {
+                    swal("Error", "Please enter Carrier", "error");
+                    event.preventDefault();
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            debugger;
+            var shippingDate = document.getElementById("ShippingDate");
+            var PaymentDate = document.getElementById("PaymentDate");
+
+            if (PaymentDate.value == "1/1/0001") {
+                PaymentDate.value = "";
+            }
+
+            if (shippingDate.value == "1/1/0001") {
+                shippingDate.value = "";
+            }
+        })
+    </script>
 }

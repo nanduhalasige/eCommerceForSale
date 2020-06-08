@@ -1,0 +1,71 @@
+﻿@model IEnumerable<OrderHeaderVM>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<div class="backgroundWhiteBorder">
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0 row container">
+                <div class="col-6">
+                    <i class="fa fa-shopping-cart"></i> &nbsp;
+                    Orders
+                </div>
+                <div class="col-6 text-right">
+                    <a class="btn btn-outline-light btn-sm" asp-controller="Home" asp-action="Index">Back to home</a>
+                </div>
+            </div>
+            <div class="card-body summary-body">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        @foreach (var orderHeaderVm in Model)
+                        {
+                            <div class="card" style="width:100%">
+                                <div class="card-header" id="heading-@orderHeaderVm.OrderHeader.Id.ToString()">
+                                    <div class="mb-0 row">
+                                        <div class="col-12 col-md-6">
+                                            Order Date: @orderHeaderVm.OrderHeader.OrderDate.ToShortDateString();
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            Status: @orderHeaderVm.OrderHeader.OrderStatus
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="container">
+                                        <ul class="list-group mb-3">
+                                            @foreach (var orderDetails in orderHeaderVm.OrderDetails)
+                                            {
+                                                var imageToDisplay = orderDetails.Product.ImagePath.Split('~').Where(x => !string.IsNullOrEmpty(x)).ToList()[0];
+
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <div class="d-none d-lg-block col-lg-1 text-center py-2">
+                                                        <img src="@imageToDisplay" class="rounded" width="60" />
+                                                    </div>
+                                                    <div class="col-12 text-sm-center col-lg-11 text-lg-left">
+                                                        <div class="col-12 col-md-8">
+                                                            <h6 class="my-0">@orderDetails.Product.ProductName</h6>
+                                                            <small class="text-muted">Quantity: @orderDetails.Count</small>
+                                                        </div>
+                                                        <div class="col-12 col-md-4 text-right">
+                                                            <span class="text-muted">&#122;&#322; @orderDetails.Price</span>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                </li>
+                                            }
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <small class="text-info">Total (PLN)</small>
+                                                <strong class="text-info">&#122;&#322;  @orderHeaderVm.OrderHeader.OrderTotal</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

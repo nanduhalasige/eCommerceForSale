@@ -14,7 +14,7 @@
 
                 <div class="dropdown-menu bg-primary" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Manage Account</a>
-                    <a class="dropdown-item" href="#">Orders</a>
+                    <a class="dropdown-item" asp-area="Customer" asp-controller="Orders" asp-action="Index">Orders</a>
                     <a class="dropdown-item" href="#">Manage Address</a>
                 </div>
             </div>

@@ -8,6 +8,7 @@ using eCommerceForSale.Entity.ViewModels;
 using eCommerceForSale.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Stripe;
 
 namespace eCommerceForSale.MVC.Areas.Admin.Controllers
@@ -92,9 +93,16 @@ namespace eCommerceForSale.MVC.Areas.Admin.Controllers
         [Authorize(Roles = Constants.AdminRole + "," + Constants.EmployeeRole)]
         public IActionResult ShipOrder(Guid Id)
         {
-            var orderHeader = _unitOfWork.OrderHeader.GetFirstOfDefault(o => o.Id.Equals(Id));
+            var orderHeader = _unitOfWork.OrderHeader.GetFirstOfDefault(o => o.Id.Equals(OrderHeaderVM.OrderHeader.Id));
+            if (string.IsNullOrEmpty(OrderHeaderVM.OrderHeader.TrackingNumber) || string.IsNullOrEmpty(OrderHeaderVM.OrderHeader.Carrier))
+            {
+                OrderHeaderVM.OrderHeader = _unitOfWork.OrderHeader.GetFirstOfDefault(o => o.Id.Equals(Id), isIncludeProperties: "ApplicationUser,Address");
+                OrderHeaderVM.OrderDetails = _unitOfWork.OrderDetails.GetAll(d => d.OrderId.Equals(Id), isIncludeProperties: "Product").Result;
+                return View("EditOrder", OrderHeaderVM);
+            }
             orderHeader.TrackingNumber = OrderHeaderVM.OrderHeader.TrackingNumber;
             orderHeader.Carrier = OrderHeaderVM.OrderHeader.Carrier;
+            orderHeader.OrderStatus = Constants.StatusShipped;
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }

@@ -9,7 +9,10 @@ using eCommerceForSale.Entity.ViewModels;
 using eCommerceForSale.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.Extensions.Options;
 
 namespace eCommerceForSale.MVC.Areas.Customer.Controllers
 {
@@ -18,13 +21,17 @@ namespace eCommerceForSale.MVC.Areas.Customer.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly EmailOptions _emailOptions;
+        private readonly IEmailSender _emailSender;
 
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
 
-        public ShoppingCartController(IUnitOfWork unitOfWork)
+        public ShoppingCartController(IUnitOfWork unitOfWork, IOptions<EmailOptions> options, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
+            _emailOptions = options.Value;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -119,44 +126,45 @@ namespace eCommerceForSale.MVC.Areas.Customer.Controllers
         [ActionName("CartSummary")]
         public IActionResult CartSummaryPost(string stripeToken)
         {
-            Claim claims = GetClaims();
-            ShoppingCartVM.OrderHeader = new OrderHeader();
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.GetFirstOfDefault(u => u.Id.Equals(claims.Value));
-            ShoppingCartVM.CartList = _unitOfWork.ShoppingCart.GetAll(x => x.ApplicationUserId.Equals(claims.Value), isIncludeProperties: "Product").Result;
-
-            ShoppingCartVM.OrderHeader.PaymentStatus = Constants.StatusPending;
-            ShoppingCartVM.OrderHeader.OrderStatus = Constants.StatusPending;
-            ShoppingCartVM.OrderHeader.ApplicationUserId = claims.Value;
-            ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
-
-            //adding address
-            ShoppingCartVM.OrderHeader.AddressId = ShoppingCartVM.AddressId;
-
-            _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
-            var orderDetailsList = new List<OrderDetails>();
-            foreach (var item in ShoppingCartVM.CartList)
-            {
-                var orderDetail = new OrderDetails
-                {
-                    ProductId = item.ProductId,
-                    OrderId = ShoppingCartVM.OrderHeader.Id,
-                    Price = item.Product.Price.ToString(),
-                    Count = item.Count
-                };
-
-                ShoppingCartVM.OrderHeader.OrderTotal += item.Count * item.Product.Price;
-
-                _unitOfWork.OrderDetails.Add(orderDetail);
-                _unitOfWork.ShoppingCart.Remove(item.Id);
-            }
-            HttpContext.Session.SetInt32(Constants.ShoppingCartSession, 0);
-            _unitOfWork.Save();
-
             if (stripeToken == null)
             {
+                return RedirectToAction(nameof(CartSummary));
             }
             else
             {
+                Claim claims = GetClaims();
+                ShoppingCartVM.OrderHeader = new OrderHeader();
+                ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.GetFirstOfDefault(u => u.Id.Equals(claims.Value));
+                ShoppingCartVM.CartList = _unitOfWork.ShoppingCart.GetAll(x => x.ApplicationUserId.Equals(claims.Value), isIncludeProperties: "Product").Result;
+
+                ShoppingCartVM.OrderHeader.PaymentStatus = Constants.StatusPending;
+                ShoppingCartVM.OrderHeader.OrderStatus = Constants.StatusPending;
+                ShoppingCartVM.OrderHeader.ApplicationUserId = claims.Value;
+                ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
+
+                //adding address
+                ShoppingCartVM.OrderHeader.AddressId = ShoppingCartVM.AddressId;
+
+                _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+                var orderDetailsList = new List<OrderDetails>();
+                foreach (var item in ShoppingCartVM.CartList)
+                {
+                    var orderDetail = new OrderDetails
+                    {
+                        ProductId = item.ProductId,
+                        OrderId = ShoppingCartVM.OrderHeader.Id,
+                        Price = item.Product.Price.ToString(),
+                        Count = item.Count
+                    };
+
+                    ShoppingCartVM.OrderHeader.OrderTotal += item.Count * item.Product.Price;
+
+                    _unitOfWork.OrderDetails.Add(orderDetail);
+                    _unitOfWork.ShoppingCart.Remove(item.Id);
+                }
+                HttpContext.Session.SetInt32(Constants.ShoppingCartSession, 0);
+                _unitOfWork.Save();
+
                 var option = new Stripe.ChargeCreateOptions
                 {
                     Amount = Convert.ToInt32(ShoppingCartVM.OrderHeader.OrderTotal),
@@ -189,6 +197,9 @@ namespace eCommerceForSale.MVC.Areas.Customer.Controllers
         public IActionResult OrderConfirmation(Guid id)
         {
             var confirmedOrder = _unitOfWork.OrderHeader.GetFirstOfDefault(o => o.Id.Equals(id), isIncludeProperties: "ApplicationUser,Address");
+            _emailSender.SendEmailAsync(confirmedOrder.ApplicationUser.Email, "Order Confirmation",
+                $"Successfull... Your order hase been placed");
+
             return View(confirmedOrder);
         }
 

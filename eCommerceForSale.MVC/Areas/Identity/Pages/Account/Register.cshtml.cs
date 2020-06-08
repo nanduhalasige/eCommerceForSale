@@ -124,8 +124,6 @@ namespace eCommerceForSale.MVC.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await CreateRoleIfNotExists();
-
                     if (user.Role == null)
                     {
                         var userRoles = _context.UserRoles.ToList();
@@ -180,22 +178,6 @@ namespace eCommerceForSale.MVC.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
-        }
-
-        private async Task CreateRoleIfNotExists()
-        {
-            if (!await _roleManager.RoleExistsAsync(Constants.AdminRole))
-            {
-                await _roleManager.CreateAsync(new IdentityRole(Constants.AdminRole));
-            }
-            if (!await _roleManager.RoleExistsAsync(Constants.EmployeeRole))
-            {
-                await _roleManager.CreateAsync(new IdentityRole(Constants.EmployeeRole));
-            }
-            if (!await _roleManager.RoleExistsAsync(Constants.CustomerRole))
-            {
-                await _roleManager.CreateAsync(new IdentityRole(Constants.CustomerRole));
-            }
         }
     }
 }

@@ -13,6 +13,9 @@ using eCommerceForSale.Utility;
 using System;
 using Microsoft.AspNetCore.Routing;
 using Stripe;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc;
+using eCommerceForSale.Data.DBIntialize;
 
 namespace eCommerceForSale.MVC
 {
@@ -34,12 +37,15 @@ namespace eCommerceForSale.MVC
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
 
             services.Configure<EmailOptions>(Configuration);
             services.Configure<MasterDataOptions>(Configuration);
             services.Configure<StripeOptions>(Configuration.GetSection("Stripe"));
 
+            services.AddScoped<IDBInitializer, DBInitializer>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.ConfigureApplicationCookie(options =>
@@ -68,7 +74,7 @@ namespace eCommerceForSale.MVC
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDBInitializer dBInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -93,6 +99,7 @@ namespace eCommerceForSale.MVC
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
+            dBInitializer.Initialize();
 
             app.UseEndpoints(endpoints =>
             {

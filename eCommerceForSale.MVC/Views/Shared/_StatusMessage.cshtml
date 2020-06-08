@@ -4,20 +4,22 @@
 }
 @if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(message))
 {
-    @*<script type="text/javascript">toastr.success("@TempData["_alert.message"]");</script>*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     <script type="text/javascript">
             switch ("@type") {
-                     case 'success':
+                     case "success":
                          toastr.success("@message");
                          break;
-                     case 'danger':
+                     case "danger":
                          toastr.danger("@message");
                          break;
-                     case 'info':
+                     case "info":
                          toastr.info("@message");
                          break;
-                     case 'warning':
+                     case "warning":
                          toastr.warning("@message");
                          break;
                  }
